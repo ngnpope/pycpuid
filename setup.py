@@ -1,5 +1,5 @@
 # pycpuid - CPUID powered by Python
-# Copyright (C) 2007  Bram de Greve <bram.degreve@gmail.com>
+# Copyright (C) 2007  Bram de Greve <bram.degreve@bramz.net>
 # 
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -26,11 +26,11 @@ setup (name = 'pycpuid',
 	version = '0.1',
 	description = 'CPUID powered by Python',
 	author = 'Bram de Greve',
-	author_email = 'bram.degreve@gmail.com',
-	url = 'http://www.bramz.org/projects-code/pycpuid',
+	author_email = 'bram.degreve@bramz.net',
+	url = 'http://www.bramz.net/projects-code/pycpuid/',
 	long_description = '''
 pycpuid - CPUID powered by Python
-Copyright (C) 2007  Bram de Greve <bram.degreve@gmail.com>
+Copyright (C) 2007  Bram de Greve <bram.degreve@bramz.net>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
