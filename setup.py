@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 # pycpuid - CPUID powered by Python
 # Copyright (C) 2007  Bram de Greve <bram.degreve@bramz.net>
 # 
