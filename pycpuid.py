@@ -24,57 +24,117 @@ import _pycpuid
 import struct as _struct
 
 def cpuid(infotype):
-	"cpuid(infotype) -> (eax, ebx, ecx, edx)"
+	'''
+	cpuid(infotype) -> (eax, ebx, ecx, edx)
+	'''
 	return _pycpuid.cpuid(infotype)
 
 def vendor():
-	"returns vendor string"
 	a, b, c, d = cpuid(0)
 	return _struct.pack("III", b, d, c)
 
+def stepping_id():
+	return cpuid(1)[0] & 0xf
+
+def model():
+	a = cpuid(1)[0]
+	model_number = (a >> 4) & 0xf
+	extended_model = (a >> 16) & 0xf
+	return (extended_model << 4) + model_number
+
+def family():
+	a = cpuid(1)[0]
+	family_code = (a >> 8) & 0xf
+	extended_family = (a >> 20) & 0xff
+	return extended_family + family_code
+
+def processor_type():
+	return (cpuid(1)[0] >> 12) & 0x3
+
+def brand_id():
+	return cpuid(1)[1] & 0xff
+
 def features():
-	"return tuple of available features"
-	feats = cpuid(1)[3]
-	return [key for key, mask in _feat_table if feats & mask]
+	'''
+	features() -> [str, str, ...] 
+	returns sequence of available features
+	'''
+	info = cpuid(1)
+	return [key for key, reg, bit in _feat_table if info[reg] & (1 << bit)]
 	
 _feat_table = [
-	("FPU", 0x00000001),
-	("VME", 0x00000002),
-	("DE", 0x00000004),
-	("PSE", 0x00000008),
-	("TSC", 0x00000010),
-	("MSR", 0x00000020),
-	("PAE", 0x00000040),
-	("MCE", 0x00000080),
-	("CX8", 0x00000100),
-	("APIC", 0x00000200),
-	("SEP", 0x00000800),
-	("MTRR", 0x00001000),
-	("PGE", 0x00002000),
-	("MCA", 0x00004000),
-	("CMOV", 0x00008000),
-	("PAT", 0x00010000),
-	("PSE36", 0x00020000),
-	("PSN", 0x00040000),
-	("CLFLSH", 0x00080000),
-	("DS", 0x00200000),
-	("ACPI", 0x00400000),
-	("MMX", 0x00800000),
-	("FXSR", 0x01000000),
-	("SSE", 0x02000000),
-	("SSE2", 0x04000000),
-	("SS", 0x08000000),
-	("HTT", 0x10000000),
-	("TM", 0x20000000),
-	("PBE", 0x80000000)
+	("FPU", 3, 0),
+	("VME", 3, 1),
+	("DE", 3, 2),
+	("PSE", 3, 3),
+	("TSC", 3, 4),
+	("MSR", 3, 5),
+	("PAE", 3, 6),
+	("MCE", 3, 7),
+	("CX8", 3, 8),
+	("APIC", 3, 9),
+	("SEP", 3, 11),
+	("MTRR", 3, 12),
+	("PGE", 3, 13),
+	("MCA", 3, 14),
+	("CMOV", 3, 15),
+	("PAT", 3, 16),
+	("PSE36", 3, 17),
+	("PSN", 3, 18),
+	("CLFLSH", 3, 19),
+	("DS", 3, 21),
+	("ACPI", 3, 22),
+	("MMX", 3, 23),
+	("FXSR", 3, 24),
+	("SSE", 3, 25),
+	("SSE2", 3, 26),
+	("SS", 3, 27),
+	("HTT", 3, 28),
+	("TM", 3, 29),
+	("PBE", 3, 31),
+	("SSE3", 2, 0),
+	("PCLMULDQ", 2, 1),
+	("DTES64", 2, 2),
+	("MONITOR", 2, 3),
+	("DSCPL", 2, 4),
+	("VMX", 2, 5),
+	("SMX", 2, 6),
+	("EST", 2, 7),
+	("TM2", 2, 8),
+	("SSE3", 2, 9),
+	("CNXTID", 2, 10),
+	("CX16", 2, 13),
+	("XTPR", 2, 14),
+	("PDCM", 2, 15),
+	("DCA", 2, 18),
+	("SSE4_1", 2, 19),
+	("SSE4_2", 2, 20),
+	("X2APIC", 2, 21),
+	("MOVBE", 2, 22),
+	("POPCNT", 2, 23),
+	("AES", 2, 25),
+	("XSAVE", 2, 26),
+	("OSXSAVE", 2, 27),
 	]
 	
 def _init():
 	import sys
-	mod = sys.modules['pycpuid']
-	feats = cpuid(0)[3]
-	for key, mask in _feat_table:
-		has_feat = (feats & mask) != 0
+	if __name__ == '__main__':
+		mod = sys.modules['__main__']
+	else:
+		mod = sys.modules['pycpuid']
+	info = cpuid(0)
+	for key, reg, bit in _feat_table:
+		has_feat = (info[reg] & (1 << bit)) != 0
 		mod.__dict__['HAS_' + key] = has_feat
 		
 _init()
+
+if __name__ == "__main__":
+	print "Vendor:", vendor()
+	print "Stepping ID:", stepping_id()
+	print "Model:", hex(model())
+	print "Family:", family()
+	print "Processor Type:", processor_type()
+	print "Brand ID:", brand_id()
+	print "Features:", features()
