@@ -25,7 +25,7 @@ _pycpuid = Extension('_pycpuid',
 	sources = ['_pycpuid.c'])
 
 setup (name = 'pycpuid',
-	version = '0.1',
+	version = '0.2',
 	description = 'CPUID powered by Python',
 	author = 'Bram de Greve',
 	author_email = 'bram.degreve@bramz.net',
