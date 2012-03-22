@@ -19,9 +19,9 @@ __author__ = 'Bram de Greve'
 __author_email__ = 'bram.degreve@bramz.net'
 __maintainer__ = 'Flight Data Services Ltd'
 __maintainer_email__ = 'developers@flightdataservices.com'
-__url__ = ''
+__url__ = 'http://pypi.python.org/pypi/PyCPUID'
 __description__ = 'CPUID powered by Python.'
-__download_url__ = ''
+__download_url__ = 'https://github.com/FlightDataServices/PyCPUID'
 __classifiers__ = [
     'Development Status :: 4 - Beta',
     'Environment :: Console',

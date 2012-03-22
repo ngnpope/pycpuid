@@ -47,6 +47,11 @@ identify the CPU.
     print "all availabe features:", pycpuid.features()
     print "brand string:", pycpuid.brand_string()
 
+Get the Code
+------------
+
+* https://github.com/FlightDataServices/PyCPUID
+
 .. _Flight Data Services: http://www.flightdataservices.com/
 .. _Intel: http://www.intel.com/assets/pdf/appnote/241618.pdf
 .. _AMD: http://www.amd.com/us-en/assets/content_type/white_papers_and_tech_docs/25481.pdf
