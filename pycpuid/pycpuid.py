@@ -5,6 +5,7 @@
 # http://www.flightdataservices.com
 # See the file "LICENSE" for the full license governing this code.
 
+import sys
 import _pycpuid
 import struct as _struct
 
@@ -15,7 +16,7 @@ def cpuid(infotype):
     '''
     cpuid(infotype) -> (eax, ebx, ecx, edx)
     '''
-	return _pycpuid.cpuid(infotype)
+    return _pycpuid.cpuid(infotype)
 
 def vendor():
     a, b, c, d = cpuid(0)
@@ -112,7 +113,6 @@ _feat_table = [
     ]
 	
 def _init():
-    import sys
     if __name__ == '__main__':
         mod = sys.modules['__main__']
     else:
