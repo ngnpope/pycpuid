@@ -6,9 +6,9 @@
 # See the file "LICENSE" for the full license governing this code.
 
 # Ensure PyCPUID 0.3 and later has the same namespace as previous version while
-# allowing setup.py and Sphinx to get at the meta data prior to the C extension 
+# allowing setup.py and Sphinx to get at the meta data prior to the C extension
 # being built.
-try:    
+try:
     from pycpuid import *
 except ImportError:
     pass
@@ -28,7 +28,7 @@ __classifiers__ = [
     'Intended Audience :: Developers',
     'License :: OSI Approved :: GNU Library or Lesser General Public License \
     (LGPL)',
-    'Programming Language :: Python :: 2.5',    
+    'Programming Language :: Python :: 2.5',
     'Programming Language :: Python :: 2.6',
     'Programming Language :: Python :: 2.7',
     'Programming Language :: Python :: Implementation :: CPython',

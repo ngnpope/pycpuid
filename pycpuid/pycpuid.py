@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) Bram de Greve <bram.degreve@bramz.net> 
+# Copyright (c) Bram de Greve <bram.degreve@bramz.net>
 # Copyright (c) Flight Data Services Ltd
 # http://www.flightdataservices.com
 # See the file "LICENSE" for the full license governing this code.
@@ -18,12 +18,15 @@ def cpuid(infotype):
     '''
     return _pycpuid.cpuid(infotype)
 
+
 def vendor():
     a, b, c, d = cpuid(0)
     return _struct.pack("III", b, d, c)
 
+
 def stepping_id():
     return cpuid(1)[0] & 0xf
+
 
 def model():
     a = cpuid(1)[0]
@@ -31,32 +34,37 @@ def model():
     extended_model = (a >> 16) & 0xf
     return (extended_model << 4) + model_number
 
+
 def family():
     a = cpuid(1)[0]
     family_code = (a >> 8) & 0xf
     extended_family = (a >> 20) & 0xff
     return extended_family + family_code
 
+
 def processor_type():
     return (cpuid(1)[0] >> 12) & 0x3
 
+
 def brand_id():
     return cpuid(1)[1] & 0xff
-	
+
+
 def brand_string():
     a = cpuid(EXTENDED_OFFSET)
     assert a >= (EXTENDED_OFFSET | 0x4), "brand string is not supported by this CPU"
     s = ''.join([_struct.pack("IIII", *cpuid(EXTENDED_OFFSET | k)) for k in 0x2, 0x3, 0x4])
     return s[:s.index('\0')]
 
+
 def features():
     '''
-    features() -> [str, str, ...] 
+    features() -> [str, str, ...]
     returns sequence of available features
     '''
     info = cpuid(1)
     return [key for key, reg, bit in _feat_table if info[reg] & (1 << bit)]
-	
+
 _feat_table = [
     ("FPU", 3, 0),
     ("VME", 3, 1),
@@ -111,7 +119,8 @@ _feat_table = [
     ("XSAVE", 2, 26),
     ("OSXSAVE", 2, 27),
     ]
-	
+
+
 def _init():
     if __name__ == '__main__':
         mod = sys.modules['__main__']
