@@ -1,55 +1,51 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Copyright (c) Bram de Greve <bram.degreve@bramz.net> 
+# Copyright (c) Flight Data Services Ltd
+# http://www.flightdataservices.com
+# See the file "LICENSE" for the full license governing this code.
 
-# pycpuid - CPUID powered by Python
-# Copyright (C) 2007  Bram de Greve <bram.degreve@bramz.net>
-# 
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License, or (at your option) any later version.
-# 
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Lesser General Public License for more details.
-# 
-# You should have received a copy of the GNU Lesser General Public
-# License along with this library; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+try:
+    from setuptools import setup, find_packages
+except ImportError:
+    from distribute_setup import use_setuptools
+    use_setuptools()
+    from setuptools import setup, find_packages
 
+from distutils.core import setup
+from distutils.extension import Extension
 
-from distutils.core import setup, Extension
-import os.path
+import pycpuid as pkg
+from requirements import RequirementsParser
+requirements = RequirementsParser()
 
-_pycpuid = Extension('_pycpuid',
-	sources = ['_pycpuid.c'])
+setup(
+    name=pkg.__packagename__,
+    version=pkg.__version__,
+    author=pkg.__author__,
+    author_email=pkg.__author_email__,
+    maintainer=pkg.__maintainer__,
+    maintainer_email=pkg.__maintainer_email__,
+    url=pkg.__url__,
+    description=pkg.__description__,
+    long_description=open('README').read() + open('CHANGES').read() + 
+    open('TODO').read() + open('AUTHORS').read(),
+    download_url=pkg.__download_url__,
+    classifiers=pkg.__classifiers__,
+    platforms=pkg.__platforms__,
+    license=pkg.__license__,
+    keywords=pkg.__keywords__,
+    packages=find_packages(exclude=("tests",)),
+    include_package_data=True,
+    zip_safe=False,
+    install_requires=requirements.install_requires,
+    setup_requires=requirements.setup_requires,
+    tests_require=requirements.tests_require,
+    extras_require=requirements.extras_require,
+    dependency_links=requirements.dependency_links,
+    test_suite='nose.collector',
+    ext_modules = [Extension('pycpuid._pycpuid', ['pycpuid/_pycpuid.c'])],
+)
 
-setup (name = 'pycpuid',
-	version = '0.2',
-	description = 'CPUID powered by Python',
-	author = 'Bram de Greve',
-	author_email = 'bram.degreve@bramz.net',
-	url = 'http://www.bramz.net/projects-code/pycpuid/',
-	long_description = '''
-pycpuid - CPUID powered by Python
-Copyright (C) 2007-2009  Bram de Greve <bram.degreve@bramz.net>
-
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
-
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-''',
-	py_modules = ['pycpuid'],
-	ext_modules = [_pycpuid],
-	)
-
-# EOF
+################################################################################
+# vim:et:ft=python:nowrap:sts=4:sw=4:ts=4

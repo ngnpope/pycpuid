@@ -1,0 +1,31 @@
+Changes
+=======
+
+0.3
+-----
+
+* Should now compile on 32-bit and 64-bit platforms.
+* Updated packaging and now uses SetupFixer.
+* Added documentation based on the `original text`_ from Bram.
+
+0.2
+---
+
+* The feature abbreviations now resemble the ones in the Intel and AMD 
+  documentation.
+* ``features()`` is now a function and returns a list of strings, instead of 
+  being a comma separated string.
+* Added some functions like ``vendor()`` and ``brand_string()`` as handy 
+  wrappers.
+* PyCPUID is now a combination of a pure python module ``pycpuid.py`` and an 
+  extension ``_pycpuid.c``. The extension module is only responsible for the 
+  actual ``cpuid`` call. All the fancy wrapper bits are implemented in Python.
+* Added gcc support. Using ``__cpuid`` intrinsic on MSVC to support x64.
+
+0.1
+---
+
+* Initial release.
+
+.. _original text: http://www.bramz.net/projects-code/pycpuid/
+
