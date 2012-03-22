@@ -14,7 +14,7 @@ except ImportError:
     pass
 
 __packagename__ = 'PyCPUID'
-__version__ = '0.4'
+__version__ = '0.5'
 __author__ = 'Bram de Greve'
 __author_email__ = 'bram.degreve@bramz.net'
 __maintainer__ = 'Flight Data Services Ltd'
