@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) Bram de Greve <bram.degreve@bramz.net> 
+# Copyright (c) Bram de Greve <bram.degreve@bramz.net>
 # Copyright (c) Flight Data Services Ltd
 # http://www.flightdataservices.com
 # See the file "LICENSE" for the full license governing this code.
@@ -26,7 +26,8 @@ __classifiers__ = [
     'Development Status :: 4 - Beta',
     'Environment :: Console',
     'Intended Audience :: Developers',
-    'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
+    'License :: OSI Approved :: GNU Library or Lesser General Public License \
+    (LGPL)',
     'Programming Language :: Python :: 2.5',    
     'Programming Language :: Python :: 2.6',
     'Programming Language :: Python :: 2.7',
