@@ -1,8 +1,13 @@
 Changes
 =======
 
+0.4
+---
+
+* Mostly PEP8 compliant.
+
 0.3
------
+---
 
 * Should now compile on 32-bit and 64-bit platforms.
 * Updated packaging and now uses SetupFixer.

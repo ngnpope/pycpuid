@@ -26,8 +26,7 @@ __classifiers__ = [
     'Development Status :: 4 - Beta',
     'Environment :: Console',
     'Intended Audience :: Developers',
-    'License :: OSI Approved :: GNU Library or Lesser General Public License \
-    (LGPL)',
+    'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
     'Programming Language :: Python :: 2.5',
     'Programming Language :: Python :: 2.6',
     'Programming Language :: Python :: 2.7',
