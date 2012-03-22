@@ -29,12 +29,12 @@ static PyObject* _pycpuid_cpuid(PyObject* module, PyObject* args)
     
     // Flight Data Services couldn't get this to build on 64-bit.
     // See http://code.google.com/p/pycpuid/source/browse/release-0.1/cpuid/cpuid.c
-# if defined(__x86_64__) || !defined(PIC)
+#   ifdef __x86_64__
 	__asm__ __volatile__(
 		"cpuid;"
 		: "=a"(cpuinfo[0]), "=b"(cpuinfo[1]), "=c"(cpuinfo[2]), "=d"(cpuinfo[3])
 		: "a"(infotype));
-# else
+#   else
 	__asm__ __volatile__(
 		"pushl %%ebx;"
 		"cpuid;"
