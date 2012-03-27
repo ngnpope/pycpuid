@@ -20,6 +20,9 @@ within Python. Some functions are provided for translation to something human
 readable, but this is far from complete. Full details on how to interpret the
 raw data can be found in the application notes of `Intel`_ and `AMD`_.
 
+Project maintained by `Flight Data Services`_ and released under the GNU Lesses 
+General Public License (`LGPL-2.1`_).
+
 Installation
 ------------
 
@@ -31,8 +34,22 @@ Package requires ``pip`` for installation.
 If you're doing this on Windows you'll need to make sure you have a C++ compiler
 installed and properly configured.
 
-Using PyCPUID
+Source Code
+-----------
+
+Source code is available from `GitHub`_:
+
+* https://github.com/organizations/FlightDataServices/PyCPUID
+
+Documentation
 -------------
+
+Documentation is available from the `Python Package Index`_:
+
+* http://packages.python.org/PyCPUID/
+
+Using PyCPUID
+=============
 
 There's not much to it, really. PyCPUID is just a bunch of module constants.
 Just import the module and access the constants. The ``HAS_FOOBAR`` constants
@@ -47,12 +64,10 @@ identify the CPU.
     print "all availabe features:", pycpuid.features()
     print "brand string:", pycpuid.brand_string()
 
-Get the Code
-------------
-
-* https://github.com/FlightDataServices/PyCPUID
-
 .. _Flight Data Services: http://www.flightdataservices.com/
-.. _Intel: http://www.intel.com/assets/pdf/appnote/241618.pdf
-.. _AMD: http://www.amd.com/us-en/assets/content_type/white_papers_and_tech_docs/25481.pdf
+.. _LGPL-2.1: http://www.opensource.org/licenses/lgpl-2.1.php
+.. _GitHub: https://github.com/
+.. _Python Package Index: http://pypi.python.org/
+.. _Intel: http://www.intel.com/content/www/us/en/processors/processor-identification-cpuid-instruction-note.html
+.. _AMD: http://support.amd.com/us/Embedded_TechDocs/25481.pdf
 
