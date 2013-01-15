@@ -114,7 +114,7 @@ rm coverage.xml nosetests.xml pylint.log pep8.log cpd.xml sloccount.log 2>/dev/n
 rm -rf htmlcov 2>/dev/null
 
 # Run the tests suite and generate coverage reports
-nosetests --with-xunit --with-coverage --cover-package=${PACKAGE} --all-modules --traverse-namespace --cover-inclusive --cover-erase
+nosetests --with-xunit --with-coverage --cover-package=${PACKAGE} --traverse-namespace --cover-erase
 python -m coverage xml --include=${PACKAGE}*
 python -m coverage html --include=${PACKAGE}*
 
