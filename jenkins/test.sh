@@ -111,11 +111,12 @@ fi
 
 # Remove pre-existing metric output files
 rm coverage.xml nosetests.xml pylint.log pep8.log cpd.xml sloccount.log 2>/dev/null
+rm -rf htmlcov 2>/dev/null
 
 # Run the tests suite and generate coverage reports
-if [ -f setup.py ] && [ -d tests ]; then
-    python setup.py jenkins
-fi
+nosetests --with-xunit --with-coverage --cover-package=${PACKAGE} --all-modules --traverse-namespace --cover-inclusive --cover-erase
+python -m coverage xml --include=${PACKAGE}*
+python -m coverage html --include=${PACKAGE}*
 
 # Pyflakes code quality metric, in Pylint format
 pyflakes ${PACKAGE} | awk -F\: '{printf "%s:%s: [E]%s\n", $1, $2, $3}' > pylint.log
