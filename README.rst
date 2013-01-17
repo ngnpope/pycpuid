@@ -71,3 +71,6 @@ identify the CPU.
 .. _Intel: http://www.intel.com/content/www/us/en/processors/processor-identification-cpuid-instruction-note.html
 .. _AMD: http://support.amd.com/us/Embedded_TechDocs/25481.pdf
 
+.. image:: https://cruel-carlota.pagodabox.com/95fea790ea9043d121f74b6c0d365eed
+    :alt: githalytics.com
+    :target: http://githalytics.com/FlightDataServices/PyCPUID
