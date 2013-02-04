@@ -106,27 +106,21 @@ fi
 # Build Sphinx documentation
 if [ -f ${WORKSPACE}/doc/Makefile ]; then
     rm -rf ${WORKSPACE}/doc/build/*
-    python setup.py build_sphinx
+    python setup.py build_sphinx -q 2>sphinx.log
 fi
 
 # Remove pre-existing metric output files
 rm coverage.xml nosetests.xml cpd.xml 2>/dev/null
-rm -rf htmlcov 2>/dev/null
 
 # Run the tests suite and generate coverage reports
 nosetests --with-xunit --with-coverage --cover-package=${PACKAGE} --traverse-namespace --cover-erase
 python -m coverage xml --include=${PACKAGE}*
-python -m coverage html --include=${PACKAGE}*
 
 # Pyflakes code quality metric, in Pylint format
 pyflakes ${PACKAGE} | awk -F\: '{printf "%s:%s: [E]%s\n", $1, $2, $3}' > pylint.log
 
 # PEP8 code quality metric
-#E501    line too long (82 > 79 characters)
-#W291    trailing whitespace
-#W292    no newline at end of file
-#W293    blank line contains whitespace
-pep8 --ignore=W291,W292,W293,E501 ${PACKAGE} > pep8.log
+pep8 ${PACKAGE} > pep8.log
 
 # Copy and Paste Detector code quality metric
 clonedigger --fast --cpd-output --output=cpd.xml ${PACKAGE}
