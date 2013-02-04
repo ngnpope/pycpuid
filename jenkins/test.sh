@@ -68,20 +68,20 @@ if [ ! -f ~/.pip/pip.conf ]; then
     mkdir -p ~/.pip/ 2>/dev/null
     echo "[global]"                                                 >  ~/.pip/pip.conf
     echo "index-url = http://pypi.flightdataservices.com/simple/"   >> ~/.pip/pip.conf
-fi    
+fi
 
 # Ensure 'easy_install' and distutils uses the internal PyPI server
 if [ ! -f ~/.pydistutils.cfg ]; then
     echo "[easy_install]"                                           >  ~/.pydistutils.cfg
     echo "index_url = http://pypi.flightdataservices.com/simple/"   >> ~/.pydistutils.cfg
-fi    
+fi
 
 # Update pip and distribute to the latest versions
 pip install --upgrade pip distribute
 
 if [ -f requirements_early.txt ]; then
     pip install --upgrade --requirement=requirements_early.txt
-fi    
+fi
 
 for REQUIREMENT in `ls -1 requirements*.txt | grep -v early`
 do
@@ -97,9 +97,9 @@ fi
 
 # Install runtime requirements.
 if [ -f setup.py ]; then
-    # Remove 'build' and 'dist' directories to ensure clean builds are made.    
+    # Remove 'build' and 'dist' directories to ensure clean builds are made.
     rm -rf ${WORKSPACE}/dist
-    rm -rf ${WORKSPACE}/build    
+    rm -rf ${WORKSPACE}/build
     python setup.py develop
 fi
 
@@ -110,7 +110,7 @@ if [ -f ${WORKSPACE}/doc/Makefile ]; then
 fi
 
 # Remove pre-existing metric output files
-rm coverage.xml nosetests.xml pylint.log pep8.log cpd.xml sloccount.log 2>/dev/null
+rm coverage.xml nosetests.xml cpd.xml 2>/dev/null
 rm -rf htmlcov 2>/dev/null
 
 # Run the tests suite and generate coverage reports
@@ -122,7 +122,11 @@ python -m coverage html --include=${PACKAGE}*
 pyflakes ${PACKAGE} | awk -F\: '{printf "%s:%s: [E]%s\n", $1, $2, $3}' > pylint.log
 
 # PEP8 code quality metric
-pep8 --repeat --ignore=E501 ${PACKAGE} > pep8.log
+#E501    line too long (82 > 79 characters)
+#W291    trailing whitespace
+#W292    no newline at end of file
+#W293    blank line contains whitespace
+pep8 --ignore=W291,W292,W293,E501 ${PACKAGE} > pep8.log
 
 # Copy and Paste Detector code quality metric
 clonedigger --fast --cpd-output --output=cpd.xml ${PACKAGE}
