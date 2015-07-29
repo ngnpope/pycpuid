@@ -47,11 +47,29 @@ static PyObject* _pycpuid_cpuid(PyObject* module, PyObject* args)
 	return Py_BuildValue("IIII", cpuinfo[0], cpuinfo[1], cpuinfo[2], cpuinfo[3]);
 }
 
-
+static PyObject* _pycpuid_xgetbv(PyObject* module, PyObject* args)
+{
+	unsigned regs[2] = { 0, 0 };
+	unsigned ecx;
+	if (!PyArg_ParseTuple(args, "I:ecx", &ecx))
+	{
+		return 0;
+	}
+#ifdef _MSC_VER
+	regs[0] = regs[1] = 0; /* XXX */
+#else
+	__asm__ __volatile__(
+		"xgetbv"
+		: "=a"(regs[0]), "=d"(regs[1])
+		: "c"(ecx));
+#endif
+	return Py_BuildValue("II", regs[0], regs[1]);
+}
 
 static PyMethodDef _pycpuid_methods[] = 
 {
 	{ "cpuid", _pycpuid_cpuid, METH_VARARGS, "cpuid(eax) -> (eax, ebx, ecx, edx)"},
+	{ "xgetbv", _pycpuid_xgetbv, METH_VARARGS, "xgetbv(ecx) -> (eax, edx)"},
 	{ 0, 0, 0, 0 },
 };
 

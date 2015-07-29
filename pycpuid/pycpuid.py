@@ -11,13 +11,24 @@ import struct as _struct
 
 EXTENDED_OFFSET = 0x80000000
 
-
 def cpuid(infotype):
     '''
     cpuid(infotype) -> (eax, ebx, ecx, edx)
     '''
     return _pycpuid.cpuid(infotype)
 
+def xgetbv(reg):
+    '''
+    '''
+    info = cpuid(1)
+    if (info[2] & (1 << 27)) != 0:
+        return _pycpuid.xgetbv(reg)
+    return 0
+
+def xcr0():
+    '''
+    '''
+    return xgetbv(0)
 
 def vendor():
     a, b, c, d = cpuid(0)
@@ -63,7 +74,11 @@ def features():
     returns sequence of available features
     '''
     info = cpuid(1)
-    return [key for key, reg, bit in _feat_table if info[reg] & (1 << bit)]
+    res = [key for key, reg, bit in _feat_table if info[reg] & (1 << bit)]
+    rxcr0 = xcr0()
+    if (rxcr0[0] & 0x5) == 0x5 and (info[2] & (1 << 28)) != 0:
+        res.append("AVX")
+    return res
 
 _feat_table = [
     ("FPU", 3, 0),
