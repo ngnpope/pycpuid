@@ -54,9 +54,10 @@ def brand_id():
 
 def brand_string():
     a = cpuid(EXTENDED_OFFSET)
-    assert a >= (EXTENDED_OFFSET | 0x4), "brand string is not supported by this CPU"
-    s = ''.join([_struct.pack("IIII", *cpuid(EXTENDED_OFFSET | k)) for k in 0x2, 0x3, 0x4])
-    return s[:s.index('\0')]
+    if a[0] < (EXTENDED_OFFSET | 0x4):
+        raise NotImplementedError("Brand string is not supported by this CPU")
+    segments = [_struct.pack("IIII", *cpuid(EXTENDED_OFFSET | k)) for k in (0x2, 0x3, 0x4)]
+    return ''.join([s.decode('utf-8').strip('\0') for s in segments])
 
 
 def features():
@@ -120,7 +121,7 @@ _feat_table = [
     ("AES", 2, 25),
     ("XSAVE", 2, 26),
     ("OSXSAVE", 2, 27),
-    ]
+]
 
 
 def _init():
