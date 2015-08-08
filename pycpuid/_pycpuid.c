@@ -11,24 +11,58 @@ See the file "LICENSE" for the full license governing this code.
 #ifdef _MSC_VER
 #include <intrin.h>
 #elif defined(__i386__) || defined(__x86_64__)
+#include <stdio.h>
+#include <sched.h>
+#include <sys/syscall.h>
+#include <sys/types.h>
 #include <cpuid.h>
 #endif
 
 static PyObject *_pycpuid_cpuid(PyObject* module, PyObject* args) {
+    #if defined(__i386__) || defined(__x86_64__)
+    pid_t pid;
+    cpu_set_t saved, target;
+    int cpu_num = 0;
+    #endif
     unsigned int infotype = 0;
     unsigned int cpuinfo[4] = { 0 };
+
+    #ifdef _MSC_VER
 
     if(!PyArg_ParseTuple(args, "I", &infotype))
         return NULL;
 
-    #ifdef _MSC_VER
     __cpuid(cpuinfo, infotype);
     return Py_BuildValue("(IIII)", cpuinfo[0], cpuinfo[1], cpuinfo[2], cpuinfo[3]);
+
     #elif defined(__i386__) || defined(__x86_64__)
+
+    if(!PyArg_ParseTuple(args, "I|i", &infotype, &cpu_num))
+        return NULL;
+
+    pid = syscall(__NR_gettid);
+    if(sched_getaffinity(pid, sizeof(cpu_set_t), &saved) != 0) {
+        PyErr_SetString(PyExc_RuntimeError, "Unable to get CPU affinity");
+        return NULL;
+    }
+
+    CPU_ZERO(&target);
+    CPU_SET(cpu_num, &target);
+    if(sched_setaffinity(pid, sizeof(cpu_set_t), &target) != 0) {
+        PyErr_SetString(PyExc_OSError, "Unable to set CPU affinity");
+        return NULL;
+    }
+
     if(__get_cpuid(infotype, &cpuinfo[0], &cpuinfo[1], &cpuinfo[2], &cpuinfo[3]) != 1) {
         PyErr_SetString(PyExc_RuntimeError, "Requested CPUID level not supported");
         return NULL;
     }
+
+    if(sched_setaffinity(pid, sizeof(cpu_set_t), &saved) != 0) {
+        PyErr_SetString(PyExc_OSError, "Unable to restore CPU affinity");
+        return NULL;
+    }
+
     return Py_BuildValue("(IIII)", cpuinfo[0], cpuinfo[1], cpuinfo[2], cpuinfo[3]);
     #else
     PyErr_SetString(PyExc_NotImplementedError, "CPUID is only supported on x86");
