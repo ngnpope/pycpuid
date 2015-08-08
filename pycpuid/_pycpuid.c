@@ -41,7 +41,34 @@ static PyMethodDef _pycpuid_methods[] = {
     { NULL, NULL, 0, NULL},
 };
 
-PyMODINIT_FUNC init_pycpuid(void) {
-    Py_InitModule("_pycpuid", _pycpuid_methods);
+#if PY_MAJOR_VERSION >= 3
+
+static struct PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT,
+    "_pycpuid",          /* m_name */
+    "CPUID info",        /* m_doc */
+    -1,                  /* m_size */
+    _pycpuid_methods,    /* m_methods */
+    NULL,                /* m_reload */
+    NULL,                /* m_traverse */
+    NULL,                /* m_clear */
+    NULL,                /* m_free */
+};
+
+PyMODINIT_FUNC PyInit__pycpuid(void) {
+    PyObject *m;
+
+    m = PyModule_Create(&moduledef);
+    if(m == NULL)
+        return NULL;
+    return m;
 }
+
+#else
+
+PyMODINIT_FUNC init_pycpuid(void) {
+    (void)Py_InitModule3("_pycpuid", _pycpuid_methods, "CPUID info");
+}
+
+#endif
 
