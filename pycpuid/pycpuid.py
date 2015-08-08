@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) Bram de Greve <bram.degreve@bramz.net>
 # Copyright (c) Flight Data Services Ltd
+# Copyright (c) 2015 Michael Mohr <akihana@gmail.com>
 # http://www.flightdataservices.com
 # See the file "LICENSE" for the full license governing this code.
 
