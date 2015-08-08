@@ -49,7 +49,7 @@ static PyObject *_pycpuid_cpuid(PyObject* module, PyObject* args) {
     CPU_ZERO(&target);
     CPU_SET(cpu_num, &target);
     if(sched_setaffinity(pid, sizeof(cpu_set_t), &target) != 0) {
-        PyErr_SetString(PyExc_OSError, "Unable to set CPU affinity");
+        PyErr_SetFromErrno(PyExc_OSError);
         return NULL;
     }
 
@@ -59,7 +59,7 @@ static PyObject *_pycpuid_cpuid(PyObject* module, PyObject* args) {
     }
 
     if(sched_setaffinity(pid, sizeof(cpu_set_t), &saved) != 0) {
-        PyErr_SetString(PyExc_OSError, "Unable to restore CPU affinity");
+        PyErr_SetFromErrno(PyExc_OSError);
         return NULL;
     }
 
