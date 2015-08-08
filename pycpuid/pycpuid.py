@@ -5,6 +5,8 @@
 # http://www.flightdataservices.com
 # See the file "LICENSE" for the full license governing this code.
 
+from __future__ import print_function
+
 import sys
 import _pycpuid
 import struct as _struct
@@ -134,11 +136,12 @@ def _init():
 _init()
 
 if __name__ == "__main__":
-    print "Vendor:", vendor()
-    print "Stepping ID:", stepping_id()
-    print "Model:", hex(model())
-    print "Family:", family()
-    print "Processor Type:", processor_type()
-    print "Brand ID:", hex(brand_id())
-    print "Brand String:", brand_string()
-    print "Features:", features()
+    print("Vendor:", vendor())
+    print("Stepping ID:", stepping_id())
+    print("Model:", hex(model()))
+    print("Family:", family())
+    print("Processor Type:", processor_type())
+    print("Brand ID:", hex(brand_id()))
+    print("Brand String:", brand_string())
+    print("Features:", features())
+
