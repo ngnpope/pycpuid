@@ -24,17 +24,17 @@ static PyObject *_pycpuid_cpuid(PyObject* module, PyObject* args) {
     cpu_set_t saved, target;
     #endif
     int cpu_num = 0;
-    unsigned int cpuid_level = 0;
-    unsigned int cpuinfo[4] = { 0 };
+    unsigned int level = 0;
+    unsigned int info[4] = { 0 };
 
-    if(!PyArg_ParseTuple(args, "I|i", &cpuid_level, &cpu_num))
+    if(!PyArg_ParseTuple(args, "I|i", &level, &cpu_num))
         return NULL;
 
     #ifdef _MSC_VER
 
     /* Handling CPU affinity on Windows is not supported.  Patches welcome. */
-    __cpuid(cpuinfo, cpuid_level);
-    return Py_BuildValue("(IIII)", cpuinfo[0], cpuinfo[1], cpuinfo[2], cpuinfo[3]);
+    __cpuid(info, level);
+    return Py_BuildValue("(IIII)", info[0], info[1], info[2], info[3]);
 
     #elif defined(__i386__) || defined(__x86_64__)
 
@@ -51,8 +51,8 @@ static PyObject *_pycpuid_cpuid(PyObject* module, PyObject* args) {
         return NULL;
     }
 
-    if(__get_cpuid(cpuid_level, &cpuinfo[0], &cpuinfo[1], &cpuinfo[2], &cpuinfo[3]) != 1) {
-        PyErr_SetString(PyExc_RuntimeError, "Requested CPUID level not supported");
+    if(__get_cpuid(level, &info[0], &info[1], &info[2], &info[3]) != 1) {
+        PyErr_SetString(PyExc_RuntimeError, "CPUID level not supported");
         return NULL;
     }
 
@@ -61,7 +61,7 @@ static PyObject *_pycpuid_cpuid(PyObject* module, PyObject* args) {
         return NULL;
     }
 
-    return Py_BuildValue("(IIII)", cpuinfo[0], cpuinfo[1], cpuinfo[2], cpuinfo[3]);
+    return Py_BuildValue("(IIII)", info[0], info[1], info[2], info[3]);
     #else
     PyErr_SetString(PyExc_NotImplementedError, "CPUID is only supported on x86");
     return NULL;
