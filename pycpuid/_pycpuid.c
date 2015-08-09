@@ -22,6 +22,7 @@ static PyObject *_pycpuid_cpuid(PyObject* module, PyObject* args) {
     #if defined(__i386__) || defined(__x86_64__)
     pid_t pid;
     cpu_set_t saved, target;
+    int affinity_ret, cpuid_ret;
     #endif
     int cpu_num = 0;
     unsigned int level = 0;
@@ -51,12 +52,15 @@ static PyObject *_pycpuid_cpuid(PyObject* module, PyObject* args) {
         return NULL;
     }
 
-    if(__get_cpuid(level, &info[0], &info[1], &info[2], &info[3]) != 1) {
+    cpuid_ret = __get_cpuid(level, &info[0], &info[1], &info[2], &info[3]);
+    affinity_ret = sched_setaffinity(pid, sizeof(cpu_set_t), &saved);
+
+    if(cpuid_ret != 1) {
         PyErr_SetString(PyExc_RuntimeError, "CPUID level not supported");
         return NULL;
     }
 
-    if(sched_setaffinity(pid, sizeof(cpu_set_t), &saved) != 0) {
+    if(affinity_ret != 0) {
         PyErr_SetFromErrno(PyExc_OSError);
         return NULL;
     }
