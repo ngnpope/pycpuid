@@ -22,23 +22,21 @@ static PyObject *_pycpuid_cpuid(PyObject* module, PyObject* args) {
     #if defined(__i386__) || defined(__x86_64__)
     pid_t pid;
     cpu_set_t saved, target;
-    int cpu_num = 0;
     #endif
+    int cpu_num = 0;
     unsigned int infotype = 0;
     unsigned int cpuinfo[4] = { 0 };
 
-    #ifdef _MSC_VER
-
-    if(!PyArg_ParseTuple(args, "I", &infotype))
+    if(!PyArg_ParseTuple(args, "I|i", &infotype, &cpu_num))
         return NULL;
 
+    #ifdef _MSC_VER
+
+    /* Handling CPU affinity on Windows is not supported.  Patches welcome. */
     __cpuid(cpuinfo, infotype);
     return Py_BuildValue("(IIII)", cpuinfo[0], cpuinfo[1], cpuinfo[2], cpuinfo[3]);
 
     #elif defined(__i386__) || defined(__x86_64__)
-
-    if(!PyArg_ParseTuple(args, "I|i", &infotype, &cpu_num))
-        return NULL;
 
     pid = syscall(__NR_gettid);
     if(sched_getaffinity(pid, sizeof(cpu_set_t), &saved) != 0) {
