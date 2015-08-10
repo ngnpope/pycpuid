@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) Bram de Greve <bram.degreve@bramz.net>
 # Copyright (c) Flight Data Services Ltd
+# Copyright (c) 2015 Michael Mohr <akihana@gmail.com>
 # http://www.flightdataservices.com
 # See the file "LICENSE" for the full license governing this code.
+
+from __future__ import print_function
 
 import sys
 import _pycpuid
@@ -52,9 +55,10 @@ def brand_id():
 
 def brand_string():
     a = cpuid(EXTENDED_OFFSET)
-    assert a >= (EXTENDED_OFFSET | 0x4), "brand string is not supported by this CPU"
-    s = ''.join([_struct.pack("IIII", *cpuid(EXTENDED_OFFSET | k)) for k in 0x2, 0x3, 0x4])
-    return s[:s.index('\0')]
+    if a[0] < (EXTENDED_OFFSET | 0x4):
+        raise NotImplementedError("Brand string is not supported by this CPU")
+    segments = [_struct.pack("IIII", *cpuid(EXTENDED_OFFSET | k)) for k in (0x2, 0x3, 0x4)]
+    return ''.join([s.decode('utf-8').strip('\0') for s in segments])
 
 
 def features():
@@ -118,7 +122,7 @@ _feat_table = [
     ("AES", 2, 25),
     ("XSAVE", 2, 26),
     ("OSXSAVE", 2, 27),
-    ]
+]
 
 
 def _init():
@@ -134,11 +138,12 @@ def _init():
 _init()
 
 if __name__ == "__main__":
-    print "Vendor:", vendor()
-    print "Stepping ID:", stepping_id()
-    print "Model:", hex(model())
-    print "Family:", family()
-    print "Processor Type:", processor_type()
-    print "Brand ID:", hex(brand_id())
-    print "Brand String:", brand_string()
-    print "Features:", features()
+    print("Vendor:", vendor())
+    print("Stepping ID:", stepping_id())
+    print("Model:", hex(model()))
+    print("Family:", family())
+    print("Processor Type:", processor_type())
+    print("Brand ID:", hex(brand_id()))
+    print("Brand String:", brand_string())
+    print("Features:", features())
+
