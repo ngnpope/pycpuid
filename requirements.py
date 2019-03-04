@@ -146,7 +146,7 @@ def _split_package(package):
     if not matches:
         return None
     components = list(matches.groups())
-    components = map(lambda x: '' if x is None else x.strip(), components)
+    components = list(map(lambda x: '' if x is None else x.strip(), components))
     if components[-1]:
         components[-1] = sorted(map(str.strip, components[-1].split(',')))
     else:
@@ -260,7 +260,7 @@ def _read_requirements_file(filename, data=None):
                             # FIXME: Find a solution or report an error?
                             continue
                     # Update list of extras:
-                    package[3] = sorted(list(set(package[3] + components[3])))
+                    package[3] = sorted(set(package[3] + components[3]))
                     updated = True
                     break
             if not updated:
@@ -310,7 +310,7 @@ class RequirementsParser(object):
         filename = _build_filename(path, '%s.%s', 'dependency_links', 'txt')
         if os.path.isfile(filename):
             lines = open(filename, 'r').read().splitlines()
-            self.links = map(str.strip, lines)
+            self.links = list(map(str.strip, lines))
 
         paths = []
         paths += [_build_filename(path, '%s.%s', name, extn)]
@@ -352,8 +352,8 @@ class RequirementsParser(object):
         data = self.data['*']
         install_requires = []
         install_requires += data.get('p', [])
-        install_requires += map(_extract_egg_names, data.get('e', []))
-        return sorted(list(set(install_requires)))
+        install_requires += list(map(_extract_egg_names, data.get('e', [])))
+        return sorted(set(install_requires))
 
     @property
     def setup_requires(self):
@@ -368,8 +368,8 @@ class RequirementsParser(object):
         data = self.data['setup']
         setup_requires = []
         setup_requires += data.get('p', [])
-        setup_requires += map(_extract_egg_names, data.get('e', []))
-        return sorted(list(set(setup_requires)))
+        setup_requires += list(map(_extract_egg_names, data.get('e', [])))
+        return sorted(set(setup_requires))
 
     @property
     def tests_require(self):
@@ -384,8 +384,8 @@ class RequirementsParser(object):
         data = self.data['tests']
         tests_require = []
         tests_require += data.get('p', [])
-        tests_require += map(_extract_egg_names, data.get('e', []))
-        return sorted(list(set(tests_require)))
+        tests_require += list(map(_extract_egg_names, data.get('e', [])))
+        return sorted(set(tests_require))
 
     @property
     def extras_require(self):
@@ -396,13 +396,13 @@ class RequirementsParser(object):
         :rtype: dict
         '''
         extras_require = {}
-        for source, data in self.data.iteritems():
+        for source, data in self.data.items():
             if source == '*':
                 continue
             packages = []
             packages += data.get('p')
-            packages += map(_extract_egg_names, data.get('e', []))
-            packages = sorted(list(set(packages)))
+            packages += list(map(_extract_egg_names, data.get('e', [])))
+            packages = sorted(set(packages))
             if packages:
                 extras_require[source] = packages
         return extras_require
@@ -420,7 +420,7 @@ class RequirementsParser(object):
         for data in self.data.values():
             dependency_links += data.get('f', [])
             dependency_links += data.get('e', [])
-        return sorted(list(set(dependency_links)))
+        return sorted(set(dependency_links))
 
 
 ################################################################################
